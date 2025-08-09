@@ -2,7 +2,7 @@ Import streamlit as st
 Import openai
 Openai.api_key = "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"
 
-St.set_page_config(page_title=”Drug Awareness App”, layout=”wide”)
+St.set_page_config(page_title=“Drug Awareness App”, layout=“wide”)
 St.title(“💊 Drug Awareness & Support”)
 
 St.header(“Common Drugs & Their Effects”)
@@ -32,7 +32,7 @@ St.header(“💬 Chat with Drug Awareness Bot”)
 User_input = st.text_input(“Ask me anything about drug safety:”)
 If user_input:
     Response = openai.ChatCompletion.create(
-        Model=”gpt-3.5-turbo”,
+        Model=“gpt-3.5-turbo”,
         Messages=[
             {“role”: “system”, “content”: “You are a helpful drug awareness assistant.”},
             {“role”: “user”, “content”: user_input}
@@ -40,5 +40,3 @@ If user_input:
 St.write(“**Bot:**”, response.choices[0].message.content)
 St.header(“📞 Helpline Numbers”)
 St.write(“- India: 1800-11-0031 (Narcotics Control Bureau)”)
-St.write(“- USA: 1-800-662-4357 (SAMHSA National Helpline)”)
-St.write(“- UK: 0300 123 6600 (FRANK)”)
