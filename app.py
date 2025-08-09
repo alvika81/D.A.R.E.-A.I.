@@ -1,6 +1,6 @@
 Import streamlit as st
 Import openai
-Openai.api_key = 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
+Openai.api_key = "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"
 
 St.set_page_config(page_title=”Drug Awareness App”, layout=”wide”)
 St.title(“💊 Drug Awareness & Support”)
