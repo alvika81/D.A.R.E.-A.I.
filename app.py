@@ -1,7 +1,9 @@
 import streamlit as st
-import openai
+from openai import OpenAI
+import os
 
-openai.api_key = "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"
+openai_api_key = os.getenv("OPENAI_API_KEY", "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")
+client = OpenAI(api_key=openai_api_key)
 
 st.set_page_config(page_title="Drug Awareness App", layout="wide")
 st.title("💊 Drug Awareness & Support")
@@ -17,6 +19,7 @@ drugs = {
 for drug, info in drugs.items():
     st.subheader(drug)
     st.write(info)
+
 
 st.header("📝 Self-Assessment Quiz")
 score = 0
@@ -37,14 +40,17 @@ st.header("💬 Chat with Drug Awareness Bot")
 user_input = st.text_input("Ask me anything about drug safety:")
 
 if user_input:
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "You are a helpful drug awareness assistant."},
-            {"role": "user", "content": user_input}
-        ]
-    )
-    st.write("**Bot:**", response.choices[0].message["content"])
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful drug awareness assistant."},
+                {"role": "user", "content": user_input}
+            ]
+        )
+        st.write("**Bot:**", response.choices[0].message.content)
+    except Exception as e:
+        st.error(f"Error: {str(e)}")
 
 st.header("📞 Helpline Numbers")
 st.write("- India: 1800-11-0031 (Narcotics Control Bureau)")
