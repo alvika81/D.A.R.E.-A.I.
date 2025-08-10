@@ -2,7 +2,7 @@ import streamlit as st
 from openai import OpenAI
 import os
 
-openai_api_key = "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"
+openai_api_key = "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"
 client = OpenAI(api_key=openai_api_key)
 
 st.set_page_config(page_title="Drug Awareness App", layout="wide")
