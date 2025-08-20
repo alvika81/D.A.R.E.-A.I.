@@ -1,9 +1,8 @@
 import streamlit as st
-from openai import OpenAI
+import requests
 import os
 
-openai_api_key = "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"
-client = OpenAI(api_key=openai_api_key)
+anthropic_api_key = "your_anthropic_api_key_here"
 
 st.set_page_config(page_title="Drug Awareness App", layout="wide")
 st.title("💊 Drug Awareness & Support")
@@ -15,14 +14,11 @@ drugs = {
     "LSD": "A hallucinogen that can cause altered thoughts and dangerous behavior.",
     "Methamphetamine": "A stimulant that can damage the brain and cause paranoia."
 }
-
 for drug, info in drugs.items():
     st.subheader(drug)
     st.write(info)
 
-
 st.header("📝 Self-Assessment Quiz")
-score = 0
 q1 = st.radio("Do you or someone you know use drugs regularly?", ["yes", "no"])
 q2 = st.radio("Have you felt the need to cut down?", ["yes", "no"])
 q3 = st.radio("Have others expressed concern about your usage?", ["yes", "no"])
@@ -36,19 +32,31 @@ if st.button("Check Risk Level"):
     else:
         st.success("Low risk: Stay informed and healthy.")
 
-st.header("💬 Chat with Drug Awareness Bot")
+st.header("🤖 Chat with Drug Awareness Bot")
 user_input = st.text_input("Ask me anything about drug safety:")
 
 if user_input:
     try:
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful drug awareness assistant."},
+        url = "https://api.anthropic.com/v1/messages"
+        headers = {
+            "x-api-key": anthropic_api_key,
+            "anthropic-version": "2023-06-01",
+            "content-type": "application/json"
+        }
+        data = {
+            "model": "claude-3-sonnet-20240229",
+            "max_tokens": 200,
+            "messages": [
                 {"role": "user", "content": user_input}
             ]
-        )
-        st.write("**Bot:**", response.choices[0].message.content)
+        }
+
+        response = requests.post(url, headers=headers, json=data)
+        result = response.json()
+
+        # Claude’s text is inside result["content"][0]["text"]
+        st.write("**🤖 Bot:**", result["content"][0]["text"])
+
     except Exception as e:
         st.error(f"Error: {str(e)}")
 
